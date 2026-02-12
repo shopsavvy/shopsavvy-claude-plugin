@@ -1,0 +1,12 @@
+{
+  "name": "shopsavvy",
+  "description": "Shopping research and price comparison powered by ShopSavvy's database of 100M+ products across 40,000+ retailers",
+  "version": "1.0.0",
+  "author": {
+    "name": "Monolith Technologies, Inc.",
+    "url": "https://shopsavvy.com"
+  },
+  "homepage": "https://shopsavvy.com/claude",
+  "repository": "https://github.com/monolith/shopsavvy-claude-plugin",
+  "license": "MIT"
+}
