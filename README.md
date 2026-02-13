@@ -22,7 +22,24 @@ A Claude Code plugin for shopping research and price comparison, powered by Shop
 
 ## Installation
 
-### Claude Code (Recommended)
+### Quick Install (One Command)
+
+**Claude Code:**
+```bash
+claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse
+```
+
+**Any MCP Agent (via NPM):**
+```bash
+npx shopsavvy-mcp
+```
+
+**Claude Desktop:**
+Download `shopsavvy.mcpb` from [shopsavvy.com/agents](https://shopsavvy.com/agents) → Double-click → Done!
+
+---
+
+### Claude Code (Detailed)
 
 ```bash
 claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse
@@ -33,7 +50,17 @@ Verify installation:
 claude mcp list
 ```
 
+Or ask Claude: *"Please install the ShopSavvy MCP server"*
+
 ### Claude Desktop
+
+**Option 1: One-Click Bundle (Recommended)**
+1. Download `shopsavvy.mcpb` from [shopsavvy.com/agents](https://shopsavvy.com/agents)
+2. Double-click the file
+3. Claude Desktop prompts to install
+4. Done!
+
+**Option 2: Manual Configuration**
 
 Add to your Claude Desktop configuration file:
 
@@ -45,7 +72,7 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "shopsavvy": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://api.shopsavvy.com/mcp/sse"]
+      "args": ["shopsavvy-mcp"]
     }
   }
 }
@@ -70,15 +97,17 @@ Add to your Cowork MCP settings:
 
 ### Other MCP-Compatible Agents
 
-For any agent that supports MCP (Model Context Protocol), connect to:
+**Easiest (NPX):**
+```bash
+npx shopsavvy-mcp
+```
 
+**Direct SSE endpoint:**
 ```
 https://api.shopsavvy.com/mcp/sse
 ```
 
-Transport: Server-Sent Events (SSE)
-
-Or simply instruct your agent:
+**Or tell your agent:**
 > "Connect to the ShopSavvy MCP server at https://api.shopsavvy.com/mcp/sse to enable shopping research tools."
 
 ## Usage

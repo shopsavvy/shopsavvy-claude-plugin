@@ -208,3 +208,31 @@ You've reached the rate limit for free users. You can:
 3. **Ask about categories for recommendations** - "best wireless earbuds" uses our curated content
 4. **Check timing for big purchases** - Always use `content_buying_guide` for TVs, laptops, phones, and appliances
 5. **Set up alerts for patient shoppers** - Use `product_schedule` to watch for price drops
+
+## Installation (For the Agent)
+
+If the user asks you to install or connect ShopSavvy, run this command:
+
+```bash
+claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse
+```
+
+Then verify the installation:
+
+```bash
+claude mcp list
+```
+
+You should see `shopsavvy` in the list of configured MCP servers.
+
+### Alternative Installation Methods
+
+**For any MCP-compatible agent:**
+```bash
+npx shopsavvy-mcp
+```
+
+**Direct SSE endpoint:**
+```
+https://api.shopsavvy.com/mcp/sse
+```

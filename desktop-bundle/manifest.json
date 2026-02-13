@@ -1,0 +1,26 @@
+{
+  "name": "shopsavvy",
+  "display_name": "ShopSavvy",
+  "version": "1.0.0",
+  "description": "Shop smarter with AI - 100M+ products across 40,000+ retailers. Find the best prices, compare deals, and get expert buying advice.",
+  "homepage": "https://shopsavvy.com/agents",
+  "icon": "icon.png",
+  "runtime": {
+    "type": "node",
+    "command": "npx",
+    "args": ["-y", "mcp-remote", "https://api.shopsavvy.com/mcp/sse"]
+  },
+  "config": {
+    "api_key": {
+      "type": "string",
+      "required": false,
+      "sensitive": true,
+      "description": "Optional API key for higher rate limits (get one at shopsavvy.com/data)"
+    }
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false
+  }
+}

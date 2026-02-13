@@ -1,0 +1,44 @@
+{
+  "name": "shopsavvy-mcp",
+  "version": "1.0.0",
+  "description": "ShopSavvy MCP server for AI agents - 100M+ products across 40,000+ retailers",
+  "type": "module",
+  "bin": {
+    "shopsavvy-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "shopsavvy",
+    "shopping",
+    "price-comparison",
+    "ai-agent",
+    "claude",
+    "chatgpt",
+    "llm"
+  ],
+  "author": "Monolith Technologies Inc.",
+  "homepage": "https://shopsavvy.com/agents",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monolithtech/shopsavvy-mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/monolithtech/shopsavvy-mcp/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

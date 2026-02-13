@@ -1,0 +1,15 @@
+{
+  "name": "shopsavvy-plugin-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "bun test",
+    "test:mcp": "bun test test-mcp-server.test.ts",
+    "test:install": "bun test test-installation.test.ts",
+    "test:examples": "bun test test-example-queries.test.ts",
+    "verify": "bun run verify-deployment.ts"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}
