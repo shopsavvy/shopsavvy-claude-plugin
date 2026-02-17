@@ -25,7 +25,8 @@ beforeAll(async () => {
   })
 
   const data = await response.json()
-  if (data.error && data.error.includes('API key required')) {
+  const errorStr = typeof data.error === 'string' ? data.error : JSON.stringify(data.error || '')
+  if (errorStr.includes('API key required')) {
     console.error('\n⚠️  Skipping example query tests - server requires API key')
     console.error('   Deploy refinery with anonymous MCP access fix first.\n')
     process.exit(1)

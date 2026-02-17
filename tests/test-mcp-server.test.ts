@@ -35,7 +35,8 @@ describe('MCP Server - Pre-flight Check', () => {
     const data = await response.json()
 
     // Check if we got the "API key required" error
-    if (data.error && data.error.includes('API key required')) {
+    const errorStr = typeof data.error === 'string' ? data.error : JSON.stringify(data.error || '')
+    if (errorStr.includes('API key required')) {
       console.error('\n\n⚠️  MCP SERVER NOT DEPLOYED WITH ANONYMOUS ACCESS FIX')
       console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
       console.error('The MCP endpoints are returning "API key required".')

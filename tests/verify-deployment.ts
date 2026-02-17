@@ -29,7 +29,8 @@ async function verify() {
 
   const listData = await listResponse.json()
 
-  if (listData.error && listData.error.includes('API key required')) {
+  const errorStr = typeof listData.error === 'string' ? listData.error : JSON.stringify(listData.error || '')
+  if (errorStr.includes('API key required')) {
     console.log('❌ FAILED: Server requires API key')
     console.log('')
     console.log('   The MCP endpoints are not allowing anonymous access.')
