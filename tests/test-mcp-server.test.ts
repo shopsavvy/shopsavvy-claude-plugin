@@ -9,7 +9,7 @@
  * - First-run experience is excellent
  */
 
-import { describe, test, expect, beforeAll, afterAll } from 'bun:test'
+import { describe, test, expect } from 'bun:test'
 
 const MCP_BASE_URL = process.env.MCP_TEST_URL || 'https://api.shopsavvy.com'
 const SSE_ENDPOINT = `${MCP_BASE_URL}/mcp/sse`
