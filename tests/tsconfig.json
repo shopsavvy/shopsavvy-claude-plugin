@@ -25,10 +25,7 @@
 
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noPropertyAccessFromIndexSignature": false,
-
-    "suppressImplicitAnyIndexErrors": true,
-    "ignoreDeprecations": "5.0"
+    "noPropertyAccessFromIndexSignature": false
   },
 
   "include": ["./**/*"]
