@@ -8,14 +8,18 @@
   "runtime": {
     "type": "node",
     "command": "npx",
-    "args": ["-y", "mcp-remote", "https://api.shopsavvy.com/mcp/sse"]
+    "args": [
+      "-y", "mcp-remote", "https://api.shopsavvy.com/mcp/sse",
+      "--header", "Authorization:Bearer ${user_config.api_key}",
+      "--header", "anthropic-beta:mcp-client-2025-04-04"
+    ]
   },
-  "config": {
+  "user_config": {
     "api_key": {
       "type": "string",
-      "required": false,
+      "required": true,
       "sensitive": true,
-      "description": "Optional API key for higher rate limits (get one at shopsavvy.com/data)"
+      "description": "Required. Get one at shopsavvy.com/data — powers every tool call."
     }
   },
   "capabilities": {

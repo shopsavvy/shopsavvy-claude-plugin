@@ -8,5 +8,14 @@
   },
   "homepage": "https://shopsavvy.com/agents",
   "repository": "https://github.com/shopsavvy/shopsavvy-claude-plugin",
-  "license": "MIT"
+  "license": "MIT",
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "ShopSavvy API Key",
+      "description": "Required. Get one at shopsavvy.com/data — powers every tool call in this plugin.",
+      "sensitive": true,
+      "required": true
+    }
+  }
 }
