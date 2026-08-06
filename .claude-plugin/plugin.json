@@ -7,6 +7,6 @@
     "url": "https://shopsavvy.com"
   },
   "homepage": "https://shopsavvy.com/agents",
-  "repository": "https://github.com/monolith/shopsavvy-claude-plugin",
+  "repository": "https://github.com/shopsavvy/shopsavvy-claude-plugin",
   "license": "MIT"
 }
