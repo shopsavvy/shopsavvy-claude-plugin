@@ -169,12 +169,12 @@ Great value if [condition].
 
 ## Rate Limits
 
+An API key is required for real use. Without one, requests fall back to a tight per-IP anonymous tier that most research sessions will exceed immediately.
+
 | User Type | Per Minute | Per Hour | Notes |
 |-----------|------------|----------|-------|
-| Anonymous | 10 | 100 | No signup required - just start using |
-| API Key | 100 | Unlimited | Get key at shopsavvy.com/data |
-
-**For most users, anonymous limits are plenty.** A typical shopping research session uses 5-20 requests.
+| API Key | 100 | Unlimited | Required — get one at shopsavvy.com/data |
+| Anonymous (no key) | 10 | 100 | Not sufficient for a real research session |
 
 ## Error Handling
 
@@ -196,9 +196,9 @@ I don't have a detailed review for this product yet, but I can still:
 
 ### Rate Limit Reached
 ```
-You've reached the rate limit for free users. You can:
-- Wait a few minutes and try again
-- Get an API key for higher limits at shopsavvy.com/data
+You've hit the anonymous rate limit. ShopSavvy requires an API key for
+regular use — get one at shopsavvy.com/data and I'll use it for all
+future requests.
 ```
 
 ## Tips for Better Results
@@ -211,10 +211,12 @@ You've reached the rate limit for free users. You can:
 
 ## Installation (For the Agent)
 
-If the user asks you to install or connect ShopSavvy, run this command:
+If the user asks you to install or connect ShopSavvy, first ask them for their ShopSavvy API key (get one at shopsavvy.com/data — required, the anonymous tier is too limited for real use). Then run:
 
 ```bash
-claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse
+claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse \
+  --header "Authorization: Bearer THEIR_API_KEY" \
+  --header "anthropic-beta: mcp-client-2025-04-04"
 ```
 
 Then verify the installation:
@@ -229,10 +231,12 @@ You should see `shopsavvy` in the list of configured MCP servers.
 
 **For any MCP-compatible agent:**
 ```bash
-npx shopsavvy-mcp
+SHOPSAVVY_API_KEY=THEIR_API_KEY npx shopsavvy-mcp
 ```
 
-**Direct SSE endpoint:**
+**Direct SSE endpoint** (send both headers on every request):
 ```
 https://api.shopsavvy.com/mcp/sse
+Authorization: Bearer THEIR_API_KEY
+anthropic-beta: mcp-client-2025-04-04
 ```

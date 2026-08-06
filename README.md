@@ -22,27 +22,33 @@ A Claude Code plugin for shopping research and price comparison, powered by Shop
 
 ## Installation
 
+**Step 1: Get an API key.** Required for every install path below — get one at [shopsavvy.com/data](https://shopsavvy.com/data).
+
 ### Quick Install (One Command)
 
 **Claude Code:**
 ```bash
-claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse
+claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse \
+  --header "Authorization: Bearer YOUR_API_KEY" \
+  --header "anthropic-beta: mcp-client-2025-04-04"
 ```
 
 **Any MCP Agent (via NPM):**
 ```bash
-npx shopsavvy-mcp
+SHOPSAVVY_API_KEY=YOUR_API_KEY npx shopsavvy-mcp
 ```
 
 **Claude Desktop:**
-Download `shopsavvy.mcpb` from [shopsavvy.com/agents](https://shopsavvy.com/agents) → Double-click → Done!
+Download `shopsavvy.mcpb` from [shopsavvy.com/agents](https://shopsavvy.com/agents) → Double-click → paste in your API key when prompted → Done!
 
 ---
 
 ### Claude Code (Detailed)
 
 ```bash
-claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse
+claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse \
+  --header "Authorization: Bearer YOUR_API_KEY" \
+  --header "anthropic-beta: mcp-client-2025-04-04"
 ```
 
 Verify installation:
@@ -50,14 +56,18 @@ Verify installation:
 claude mcp list
 ```
 
-Or ask Claude: *"Please install the ShopSavvy MCP server"*
+Or ask Claude: *"Please install the ShopSavvy MCP server, my API key is YOUR_API_KEY"*
+
+### Claude Code Plugin
+
+Installing this as a plugin (`claude plugin install shopsavvy@<marketplace>`) prompts for your API key automatically at enable time — no manual header wrangling needed. See `.claude-plugin/plugin.json`'s `userConfig`.
 
 ### Claude Desktop
 
 **Option 1: One-Click Bundle (Recommended)**
 1. Download `shopsavvy.mcpb` from [shopsavvy.com/agents](https://shopsavvy.com/agents)
 2. Double-click the file
-3. Claude Desktop prompts to install
+3. Claude Desktop prompts to install and asks for your API key
 4. Done!
 
 **Option 2: Manual Configuration**
@@ -72,7 +82,8 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "shopsavvy": {
       "command": "npx",
-      "args": ["shopsavvy-mcp"]
+      "args": ["shopsavvy-mcp"],
+      "env": { "SHOPSAVVY_API_KEY": "YOUR_API_KEY" }
     }
   }
 }
@@ -80,35 +91,22 @@ Add to your Claude Desktop configuration file:
 
 Then restart Claude Desktop.
 
-### Claude Cowork
-
-Add to your Cowork MCP settings:
-
-```json
-{
-  "mcpServers": {
-    "shopsavvy": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://api.shopsavvy.com/mcp/sse"]
-    }
-  }
-}
-```
-
 ### Other MCP-Compatible Agents
 
 **Easiest (NPX):**
 ```bash
-npx shopsavvy-mcp
+SHOPSAVVY_API_KEY=YOUR_API_KEY npx shopsavvy-mcp
 ```
 
-**Direct SSE endpoint:**
+**Direct SSE endpoint** (send both headers on every request):
 ```
 https://api.shopsavvy.com/mcp/sse
+Authorization: Bearer YOUR_API_KEY
+anthropic-beta: mcp-client-2025-04-04
 ```
 
 **Or tell your agent:**
-> "Connect to the ShopSavvy MCP server at https://api.shopsavvy.com/mcp/sse to enable shopping research tools."
+> "Connect to the ShopSavvy MCP server at https://api.shopsavvy.com/mcp/sse (with my API key as a Bearer token) to enable shopping research tools."
 
 ## Usage
 
@@ -173,25 +171,27 @@ Claude will automatically use ShopSavvy tools to research products, compare pric
 
 | User Type | Per Minute | Per Hour | Notes |
 |-----------|------------|----------|-------|
-| Anonymous | 10 | 100 | No signup required |
-| API Key | 100 | Unlimited | Get key at shopsavvy.com/data |
+| API Key | 100 | Unlimited | Required — get one at shopsavvy.com/data |
+| Anonymous (no key) | 10 | 100 | Fallback only, not enough for a real session |
 
-**For most users, anonymous limits are plenty.** A typical shopping research session uses 5-20 requests.
+## API Key (Required)
 
-## API Key (Optional)
+Get one at [shopsavvy.com/data](https://shopsavvy.com/data).
 
-For higher rate limits, get an API key at [shopsavvy.com/data](https://shopsavvy.com/data).
-
-Add to your MCP configuration:
+Every install path above already shows where the key goes. If you're wiring it up manually with `mcp-remote` yourself, note that `mcp-remote` only reads auth from explicit `--header` args — it does not read arbitrary `env` vars — so pass the key as headers directly:
 
 ```json
 {
   "mcpServers": {
     "shopsavvy": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://api.shopsavvy.com/mcp/sse"],
+      "args": [
+        "-y", "mcp-remote", "https://api.shopsavvy.com/mcp/sse",
+        "--header", "Authorization:${SHOPSAVVY_AUTH_HEADER}",
+        "--header", "anthropic-beta:mcp-client-2025-04-04"
+      ],
       "env": {
-        "SHOPSAVVY_API_KEY": "your-api-key-here"
+        "SHOPSAVVY_AUTH_HEADER": "Bearer your-api-key-here"
       }
     }
   }

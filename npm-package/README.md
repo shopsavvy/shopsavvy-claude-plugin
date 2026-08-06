@@ -2,10 +2,12 @@
 
 Pre-configured MCP server for ShopSavvy - connect your AI agent to 100M+ products across 40,000+ retailers.
 
+**Requires an API key.** Get one at [shopsavvy.com/data](https://shopsavvy.com/data).
+
 ## Quick Start
 
 ```bash
-npx shopsavvy-mcp
+SHOPSAVVY_API_KEY=ss_live_xxx npx shopsavvy-mcp
 ```
 
 That's it! Your AI agent can now search products, compare prices, and find the best deals.
@@ -15,7 +17,7 @@ That's it! Your AI agent can now search products, compare prices, and find the b
 ### Claude Code
 
 ```bash
-claude mcp add shopsavvy -- npx shopsavvy-mcp
+claude mcp add --env SHOPSAVVY_API_KEY=ss_live_xxx --transport stdio shopsavvy -- npx shopsavvy-mcp
 ```
 
 Verify:
@@ -35,7 +37,8 @@ Add to your `claude_desktop_config.json`:
   "mcpServers": {
     "shopsavvy": {
       "command": "npx",
-      "args": ["shopsavvy-mcp"]
+      "args": ["shopsavvy-mcp"],
+      "env": { "SHOPSAVVY_API_KEY": "ss_live_xxx" }
     }
   }
 }
@@ -45,9 +48,11 @@ Then restart Claude Desktop.
 
 ### Other MCP Agents
 
-Use this SSE endpoint:
+Connect to the SSE endpoint with both headers set on every request:
 ```
 https://api.shopsavvy.com/mcp/sse
+Authorization: Bearer ss_live_xxx
+anthropic-beta: mcp-client-2025-04-04
 ```
 
 ## What You Can Do
@@ -77,10 +82,10 @@ Once connected, ask your AI:
 
 | Tier | Per Minute | Per Hour |
 |------|------------|----------|
-| Free | 10 | 100 |
 | API Key | 100 | Unlimited |
+| Anonymous (no key) | 10 | 100 |
 
-No signup required for free tier. Get an API key at [shopsavvy.com/data](https://shopsavvy.com/data) for higher limits.
+An API key is required for real use — get one at [shopsavvy.com/data](https://shopsavvy.com/data). The anonymous tier exists only as a fallback and isn't enough for a real research session.
 
 ## Links
 
