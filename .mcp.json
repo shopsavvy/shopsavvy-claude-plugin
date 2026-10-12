@@ -1,11 +1,10 @@
 {
   "mcpServers": {
     "shopsavvy": {
-      "url": "https://api.shopsavvy.com/mcp/sse",
-      "transport": "sse",
+      "type": "http",
+      "url": "https://api.shopsavvy.com/mcp",
       "headers": {
-        "Authorization": "Bearer ${user_config.api_key}",
-        "anthropic-beta": "mcp-client-2025-04-04"
+        "Authorization": "Bearer ${user_config.api_key}"
       }
     }
   }

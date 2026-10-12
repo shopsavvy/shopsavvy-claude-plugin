@@ -1,238 +1,125 @@
-# ShopSavvy AI Agent Plugin
+# ShopSavvy plugin for Claude
 
-A Claude Code plugin for shopping research and price comparison, powered by ShopSavvy: tens of millions of products, current prices from tens of thousands of retailers, and price history back to 2011.
+Shopping research and price comparison inside Claude, from [ShopSavvy](https://shopsavvy.com/agents?utm_source=github&utm_medium=referral&utm_campaign=claude_plugin): look up products by barcode, ASIN, URL or name across tens of millions of products, compare current prices from tens of thousands of retailers, check price history back to 2011, and read ShopSavvy's buying guides and quick reviews. Developers also get skills for the ShopSavvy Data API: competitor price reports, price-history exports and retailer coverage checks.
 
-## Features
+**No API key needed.** The plugin connects to ShopSavvy's hosted MCP server and works as soon as it's installed (10 tool calls a minute, 100 an hour). A ShopSavvy Data API key is optional and raises the limit.
 
-### Product Research
-- **Product Lookup** - Find products by barcode, ASIN, URL, or name
-- **Product Search** - Keyword search across tens of millions of products
-- **Universal Search** - Enhanced search with rankings and reviews
+## Install
 
-### Price Intelligence
-- **Price Comparison** - Current prices from ALL retailers
-- **Price History** - Historical trends to find the best time to buy
-- **Scheduled Re-checks** - Keep a product's prices refreshed hourly, daily or weekly (needs an API key)
+### Claude Code
 
-### Expert Content
-- **Best Picks** - Curated "Best Of" buying guides
-- **TLDR Reviews** - Quick pros/cons/verdict summaries
-- **Q&A Answers** - Product-specific questions answered
-- **Buying Guides** - When-to-buy timing advice
+In a Claude Code session (v2.1.275 or later):
 
-## Skills
+```
+/plugin install shopsavvy --marketplace shopsavvy/shopsavvy-claude-plugin
+```
+
+Or from your shell, in two steps:
+
+```bash
+claude plugin marketplace add shopsavvy/shopsavvy-claude-plugin
+claude plugin install shopsavvy@shopsavvy
+```
+
+When the plugin is enabled, Claude Code offers an optional **ShopSavvy Data API key** field. Leave it blank to use ShopSavvy free.
+
+To add only the MCP server (no skills), without the plugin:
+
+```bash
+claude mcp add --transport http shopsavvy https://api.shopsavvy.com/mcp
+```
+
+### claude.ai and Claude Desktop
+
+Go to **Settings → Connectors → Add custom connector**, name it ShopSavvy, paste `https://api.shopsavvy.com/mcp`, and leave authentication empty. On Team and Enterprise plans an owner adds it under Organization settings → Connectors.
+
+### Other MCP clients
+
+| Client can... | Use |
+|---------------|-----|
+| Connect to a remote server (Streamable HTTP) | `https://api.shopsavvy.com/mcp` |
+| Only speak the older HTTP+SSE transport | `https://api.shopsavvy.com/mcp/sse` |
+| Only launch a local command | `npx -y @shopsavvy/mcp-server` ([npm](https://www.npmjs.com/package/@shopsavvy/mcp-server), [source](https://github.com/shopsavvy/shopsavvy-mcp-server)) |
+
+Step-by-step setup for ChatGPT, Codex, Gemini CLI, Cursor, VS Code and Windsurf: [shopsavvy.com/agents#install](https://shopsavvy.com/agents?utm_source=github&utm_medium=referral&utm_campaign=claude_plugin#install).
+
+## What's in the plugin
+
+### Skills
 
 | Skill | For | What it does |
 |-------|-----|--------------|
 | `shopping-research` | Shoppers | Best price, buy now or wait, category picks, quick reviews |
-| `shopsavvy-data-api` | Developers | Which Data API call answers which question, the order to try (MCP tools, then REST with `SHOPSAVVY_API_KEY`), credit costs, limits, error codes and fixes, identifier tips, SDK install lines |
+| `shopsavvy-data-api` | Developers | Which Data API call answers which question, the order to try (MCP tools, then REST with `SHOPSAVVY_API_KEY`), limits, error codes and fixes, identifier tips, SDK install lines |
 | `competitor-price-report` | Pricing and ops teams | A list of SKUs in; a dated CSV of every retailer's current price and a REPORT.md with price position and gaps out |
-| `price-history-export` | Analysts | Price history for many products over any date range as CSV, split into 366-day slices to keep credits down |
+| `price-history-export` | Analysts | Price history for many products over any date range as CSV, split into 366-day slices |
 | `retailer-coverage-check` | Anyone evaluating coverage | Which retailers have current offers for your products, how recently each was seen, and where the gaps are |
 
-Every skill estimates credits before a large job, checks the balance with the free `/v1/usage` call, and reports "not found" and "no offers" as exactly that: no skill fills a gap with a guessed price.
+Every skill reports "not found" and "no offers" as exactly that: no skill fills a gap with a guessed price.
 
-## Installation
+### MCP tools
 
-**Step 1: Get an API key.** Required for every install path below — get one at [shopsavvy.com/data](https://shopsavvy.com/data).
+The plugin connects Claude to the ShopSavvy MCP server, which provides these tools. Each tool carries MCP annotations (title, read-only, destructive, open-world) that clients use when deciding what to confirm with you.
 
-### Quick Install (One Command)
+| Tool | What it does | Access |
+|------|--------------|--------|
+| `product_lookup` | Find one product by barcode, ASIN, URL, model number or name | Read-only |
+| `product_lookup_batch` | Look up several products at once | Read-only |
+| `product_search` | Keyword search across the catalog | Read-only |
+| `universal_search` | Ranked category search with short reviews | Read-only |
+| `product_offers` | Current prices from every retailer we have, lowest first | Read-only |
+| `product_offers_retailer` | Current prices at one retailer | Read-only |
+| `product_price_history` | Recorded prices over a date range | Read-only |
+| `content_best_picks` | ShopSavvy's "best of" buying guides | Read-only |
+| `content_tldr_review` | Pros, cons and a verdict for one product | Read-only |
+| `content_qa_answers` | Answers to common questions about a product | Read-only |
+| `content_buying_guide` | When-to-buy timing advice | Read-only |
+| `api_usage` | Credit usage for your API key | Read-only, needs a key |
+| `scheduled_products_list` | Products you've scheduled for re-checks | Read-only, needs a key |
+| `product_schedule` | Schedule hourly, daily or weekly price re-checks | Writes to your account, needs a key |
+| `product_unschedule` | Stop scheduled re-checks | Deletes from your account, needs a key |
 
-**Claude Code:**
-```bash
-claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse \
-  --header "Authorization: Bearer YOUR_API_KEY" \
-  --header "anthropic-beta: mcp-client-2025-04-04"
-```
+## Examples
 
-**Any MCP Agent (via NPM):**
-```bash
-SHOPSAVVY_API_KEY=YOUR_API_KEY npx shopsavvy-mcp
-```
-
-**Claude Desktop:**
-Download `shopsavvy.mcpb` from [shopsavvy.com/agents](https://shopsavvy.com/agents) → Double-click → paste in your API key when prompted → Done!
-
----
-
-### Claude Code (Detailed)
-
-```bash
-claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse \
-  --header "Authorization: Bearer YOUR_API_KEY" \
-  --header "anthropic-beta: mcp-client-2025-04-04"
-```
-
-Verify installation:
-```bash
-claude mcp list
-```
-
-Or ask Claude: *"Please install the ShopSavvy MCP server, my API key is YOUR_API_KEY"*
-
-### Claude Code Plugin
-
-Installing this as a plugin (`claude plugin install shopsavvy@<marketplace>`) prompts for your API key automatically at enable time — no manual header wrangling needed. See `.claude-plugin/plugin.json`'s `userConfig`.
-
-### Claude Desktop
-
-**Option 1: One-Click Bundle (Recommended)**
-1. Download `shopsavvy.mcpb` from [shopsavvy.com/agents](https://shopsavvy.com/agents)
-2. Double-click the file
-3. Claude Desktop prompts to install and asks for your API key
-4. Done!
-
-**Option 2: Manual Configuration**
-
-Add to your Claude Desktop configuration file:
-
-**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "shopsavvy": {
-      "command": "npx",
-      "args": ["shopsavvy-mcp"],
-      "env": { "SHOPSAVVY_API_KEY": "YOUR_API_KEY" }
-    }
-  }
-}
-```
-
-Then restart Claude Desktop.
-
-### Other MCP-Compatible Agents
-
-**Easiest (NPX):**
-```bash
-SHOPSAVVY_API_KEY=YOUR_API_KEY npx shopsavvy-mcp
-```
-
-**Direct SSE endpoint** (send both headers on every request):
-```
-https://api.shopsavvy.com/mcp/sse
-Authorization: Bearer YOUR_API_KEY
-anthropic-beta: mcp-client-2025-04-04
-```
-
-**Or tell your agent:**
-> "Connect to the ShopSavvy MCP server at https://api.shopsavvy.com/mcp/sse (with my API key as a Bearer token) to enable shopping research tools."
-
-## Usage
-
-### Using the Skill
-
-```
-/shopping-research AirPods Pro
-```
-
-### Natural Language
-
-Just ask Claude naturally:
-
-> "What's the best price for a PS5 right now?"
+> "What's the best price for AirPods Pro right now?"
 
 > "Best gaming laptops under $1500"
 
 > "Should I buy a TV now or wait for Black Friday?"
 
-> "Compare iPhone 15 Pro vs Samsung S24 Ultra"
+> "Compare prices for the PS5 at Best Buy and Target"
 
-Claude will automatically use ShopSavvy tools to research products, compare prices, and provide recommendations.
+Or run the skill directly: `/shopping-research AirPods Pro`
 
-## Available Tools
+## Rate limits and the optional API key
 
-### Product Research Tools
+| | Per minute | Per hour |
+|---|---|---|
+| No key | 10 tool calls | 100 tool calls |
+| ShopSavvy Data API key | 100 tool calls | No hourly cap |
 
-| Tool | Description | Credits |
-|------|-------------|---------|
-| `product_lookup` | Find product by barcode, ASIN, URL, model, or name | 1/product |
-| `product_lookup_batch` | Find multiple products at once | 1/product |
-| `product_search` | Full-text keyword search | 1/result |
-| `universal_search` | Enhanced search with rankings and reviews | 2+ credits |
+Without a key, tool calls are free. With a key, tool calls use your Data API plan's credits. Keys come with a Data API plan at [shopsavvy.com/data](https://shopsavvy.com/data?utm_source=github&utm_medium=referral&utm_campaign=claude_plugin). To use one, paste it into the plugin's optional key field (it is stored in Claude Code's secure storage, not in `settings.json`), or for the MCP server alone:
 
-### Price Intelligence Tools
-
-| Tool | Description | Credits |
-|------|-------------|---------|
-| `product_offers` | Current prices from ALL retailers | 3/product |
-| `product_offers_retailer` | Price from a SPECIFIC retailer | 2/product |
-| `product_price_history` | Historical pricing data | 3 + 1/day |
-| `product_schedule` | Set up price monitoring | 1/product |
-| `product_unschedule` | Stop monitoring | Free |
-| `scheduled_products_list` | View monitored products | Free |
-
-### Expert Content Tools
-
-| Tool | Description | Credits |
-|------|-------------|---------|
-| `content_best_picks` | Curated "Best Of" buying guides | 1/article |
-| `content_tldr_review` | Quick pros/cons/verdict | 1/review |
-| `content_qa_answers` | Product Q&A answers | 1/5 answers |
-| `content_buying_guide` | When-to-buy timing advice | 1/guide |
-
-### Utility Tools
-
-| Tool | Description | Credits |
-|------|-------------|---------|
-| `api_usage` | Check usage statistics | Free |
-
-## Rate Limits
-
-| User Type | Per Minute | Per Hour | Notes |
-|-----------|------------|----------|-------|
-| API Key | 100 | Unlimited | Required — get one at shopsavvy.com/data |
-| Anonymous (no key) | 10 | 100 | Fallback only, not enough for a real session |
-
-## API Key (Required)
-
-Get one at [shopsavvy.com/data](https://shopsavvy.com/data).
-
-Every install path above already shows where the key goes. If you're wiring it up manually with `mcp-remote` yourself, note that `mcp-remote` only reads auth from explicit `--header` args — it does not read arbitrary `env` vars — so pass the key as headers directly:
-
-```json
-{
-  "mcpServers": {
-    "shopsavvy": {
-      "command": "npx",
-      "args": [
-        "-y", "mcp-remote", "https://api.shopsavvy.com/mcp/sse",
-        "--header", "Authorization:${SHOPSAVVY_AUTH_HEADER}",
-        "--header", "anthropic-beta:mcp-client-2025-04-04"
-      ],
-      "env": {
-        "SHOPSAVVY_AUTH_HEADER": "Bearer your-api-key-here"
-      }
-    }
-  }
-}
+```bash
+claude mcp add --transport http shopsavvy https://api.shopsavvy.com/mcp \
+  --header "Authorization: Bearer YOUR_API_KEY"
 ```
 
-## Example Workflows
+## What the plugin connects to and sends
 
-### Find the Best Price
-1. Ask: "What's the best price for AirPods Pro?"
-2. Claude uses `product_lookup` → `product_offers`
-3. You get: Best price, all retailers, buy recommendation
-
-### Research a Category
-1. Ask: "Best gaming laptops under $1500"
-2. Claude uses `content_best_picks` → `universal_search` → `product_offers`
-3. You get: Top picks with prices, pros/cons, and quick reviews
-
-### Timing Advice
-1. Ask: "Should I buy a TV now?"
-2. Claude uses `product_price_history` → `content_buying_guide`
-3. You get: Price trends, best time to buy, upcoming sale predictions
+- **One network destination: `https://api.shopsavvy.com`.** The plugin declares a single remote MCP server, `https://api.shopsavvy.com/mcp`, operated by ShopSavvy (Monolith Technologies, Inc.). It runs no local programs, hooks or scripts, and installs no packages.
+- **What is sent:** when Claude calls a ShopSavvy tool, the tool name and its arguments (the product identifier, search text, retailer or date range in your request) go to that server over HTTPS, along with your API key if you set one. Nothing else from your conversation or files is sent.
+- **What the server records:** each tool call is logged with the tool name, time, response status, IP address and user agent, for rate limits, abuse prevention and usage counts; with a key, calls are also counted against your plan. See ShopSavvy's [privacy policy](https://shopsavvy.com/privacy).
+- **Data API skills:** `shopsavvy-data-api`, `competitor-price-report`, `price-history-export` and `retailer-coverage-check` call the REST API at `https://api.shopsavvy.com/v1` only when you have set `SHOPSAVVY_API_KEY` yourself, and send that key only to `api.shopsavvy.com`. They never print or save the key.
+- **Links in answers:** shopsavvy.com links in tool answers carry `utm_source`, `utm_medium` and `utm_campaign` tags naming the assistant, so ShopSavvy can count visits that came from an assistant.
 
 ## Support
 
-- Website: [shopsavvy.com](https://shopsavvy.com)
-- AI Agents: [shopsavvy.com/agents](https://shopsavvy.com/agents)
-- Data API: [shopsavvy.com/data](https://shopsavvy.com/data)
+- Help and contact: [shopsavvy.com/support](https://shopsavvy.com/support)
+- MCP server and install guide: [shopsavvy.com/agents](https://shopsavvy.com/agents?utm_source=github&utm_medium=referral&utm_campaign=claude_plugin)
+- Data API documentation: [shopsavvy.com/data/documentation](https://shopsavvy.com/data/documentation?utm_source=github&utm_medium=referral&utm_campaign=claude_plugin)
+- Issues with this plugin: [GitHub issues](https://github.com/shopsavvy/shopsavvy-claude-plugin/issues)
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT. See [LICENSE](LICENSE).

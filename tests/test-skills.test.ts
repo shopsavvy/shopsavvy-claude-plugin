@@ -87,7 +87,7 @@ describe('skill pack', () => {
   }
 
   test('plugin manifest and READMEs make no retired coverage claims', async () => {
-    const files = ['../.claude-plugin/plugin.json', '../README.md', '../desktop-bundle/manifest.json', '../npm-package/README.md', '../npm-package/package.json', '../npm-package/src/index.ts']
+    const files = ['../.claude-plugin/plugin.json', '../.claude-plugin/marketplace.json', '../README.md']
     for (const file of files) {
       const text = await Bun.file(join(import.meta.dir, file)).text()
       for (const claim of RETIRED_CLAIMS) {

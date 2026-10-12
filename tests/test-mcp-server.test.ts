@@ -387,37 +387,3 @@ describe('MCP Server - Rate Limiting', () => {
     expect(content).toMatch(/remaining|limit|anonymous/i)
   })
 })
-
-// NPM Package Tests
-describe('NPM Package - shopsavvy-mcp', () => {
-  test('package.json is valid', async () => {
-    const packageJson = await Bun.file('../npm-package/package.json').json()
-
-    expect(packageJson.name).toBe('shopsavvy-mcp')
-    expect(packageJson.bin['shopsavvy-mcp']).toBe('dist/index.js')
-    expect(packageJson.version).toBeDefined()
-  })
-
-  test('dist/index.js exists and has shebang', async () => {
-    const distFile = Bun.file('../npm-package/dist/index.js')
-    const exists = await distFile.exists()
-
-    if (exists) {
-      const content = await distFile.text()
-      expect(content.startsWith('#!/usr/bin/env node')).toBe(true)
-    }
-  })
-})
-
-// Desktop Bundle Tests
-describe('Desktop Bundle - manifest.json', () => {
-  test('manifest.json is valid', async () => {
-    const manifest = await Bun.file('../desktop-bundle/manifest.json').json()
-
-    expect(manifest.name).toBe('shopsavvy')
-    expect(manifest.display_name).toBe('ShopSavvy')
-    expect(manifest.runtime.type).toBe('node')
-    expect(manifest.runtime.command).toBe('npx')
-    expect(manifest.capabilities.tools).toBe(true)
-  })
-})

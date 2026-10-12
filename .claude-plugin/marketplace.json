@@ -1,0 +1,15 @@
+{
+  "name": "shopsavvy",
+  "description": "ShopSavvy's Claude Code plugins: shopping research, price comparison and price history, plus Data API skills for developers.",
+  "owner": {
+    "name": "Monolith Technologies, Inc.",
+    "url": "https://shopsavvy.com"
+  },
+  "plugins": [
+    {
+      "name": "shopsavvy",
+      "source": "./",
+      "description": "Shopping research and price comparison from ShopSavvy, plus Data API skills for developers. No API key needed."
+    }
+  ]
+}

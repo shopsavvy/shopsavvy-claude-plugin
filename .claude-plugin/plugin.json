@@ -1,21 +1,29 @@
 {
   "name": "shopsavvy",
-  "description": "Shopping research and price comparison from ShopSavvy (tens of millions of products, prices from tens of thousands of retailers), plus Data API skills for developers: competitor price reports, price-history exports and retailer coverage checks",
-  "version": "1.0.0",
+  "displayName": "ShopSavvy",
+  "description": "Shopping research and price comparison from ShopSavvy (tens of millions of products, prices from tens of thousands of retailers, price history back to 2011), plus Data API skills for developers: competitor price reports, price-history exports and retailer coverage checks. Works without an API key; a ShopSavvy Data API key is optional and raises the rate limit.",
+  "version": "1.1.0",
   "author": {
     "name": "Monolith Technologies, Inc.",
     "url": "https://shopsavvy.com"
   },
-  "homepage": "https://shopsavvy.com/agents",
+  "homepage": "https://shopsavvy.com/agents?utm_source=claude_plugin&utm_medium=referral&utm_campaign=plugin",
   "repository": "https://github.com/shopsavvy/shopsavvy-claude-plugin",
   "license": "MIT",
+  "keywords": ["shopping", "price-comparison", "price-history", "deals", "barcode", "upc", "product-data", "mcp"],
+  "icon": "./assets/icon.png",
+  "documentationUrl": "https://shopsavvy.com/agents",
+  "supportUrl": "https://shopsavvy.com/support",
+  "privacyPolicyUrl": "https://shopsavvy.com/privacy",
+  "termsOfServiceUrl": "https://shopsavvy.com/terms-of-use",
   "userConfig": {
     "api_key": {
       "type": "string",
-      "title": "ShopSavvy API Key",
-      "description": "Required. Get one at shopsavvy.com/data — powers every tool call in this plugin.",
+      "title": "ShopSavvy Data API key (optional)",
+      "description": "Leave blank to use ShopSavvy free (10 tool calls a minute, 100 an hour). Paste a Data API key from shopsavvy.com/data to raise the limit to 100 a minute; calls then use your plan's credits.",
       "sensitive": true,
-      "required": true
+      "required": false,
+      "default": ""
     }
   }
 }
