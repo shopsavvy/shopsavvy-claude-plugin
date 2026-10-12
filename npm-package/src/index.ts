@@ -47,7 +47,7 @@ if (args.includes("--help") || args.includes("-h")) {
 ShopSavvy MCP Server
 ====================
 
-Connect your AI agent to ShopSavvy's database of 100M+ products across 40,000+ retailers.
+Connect your AI agent to ShopSavvy: tens of millions of products, prices from tens of thousands of retailers.
 
 An API key is required. Get one at https://shopsavvy.com/data.
 

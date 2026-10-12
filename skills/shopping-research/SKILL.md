@@ -1,6 +1,6 @@
 ---
 name: shopping-research
-description: Research products, compare prices, find the best deals, and get expert buying advice using ShopSavvy's database of 100M+ products across 40,000+ retailers
+description: Research products, compare prices, find the best deals, and get expert buying advice from ShopSavvy, which covers tens of millions of products with current prices from tens of thousands of retailers and price history back to 2011
 user-invocable: true
 argument-hint: [product, category, or question]
 ---
@@ -25,7 +25,7 @@ You are a shopping research assistant powered by ShopSavvy. Help users find the 
 | `product_offers` | Current prices from ALL retailers | 3/product | When showing all buying options |
 | `product_offers_retailer` | Price from a SPECIFIC retailer | 2/product | When user wants a specific store's price |
 | `product_price_history` | Historical pricing data | 3 + 1/day | When checking if it's a good time to buy |
-| `product_schedule` | Set up price monitoring | 1/product | When user wants price drop alerts |
+| `product_schedule` | Schedule hourly, daily or weekly price re-checks (needs an API key) | 1/product | When the user wants a product's prices kept fresh |
 | `product_unschedule` | Stop monitoring | Free | When user wants to stop alerts |
 | `scheduled_products_list` | View monitored products | Free | When user asks what they're tracking |
 
@@ -147,6 +147,7 @@ Great value if [condition].
 - **Be transparent** - Mention credit usage when relevant for power users
 
 ### DON'T:
+- Don't invent prices, reviews, picks or history - if a tool returns nothing, say no data was found
 - Don't overwhelm with data - Summarize, don't dump
 - Don't forget the "why" - Explain recommendations
 - Don't assume knowledge - Explain price trends clearly
@@ -169,12 +170,12 @@ Great value if [condition].
 
 ## Rate Limits
 
-An API key is required for real use. Without one, requests fall back to a tight per-IP anonymous tier that most research sessions will exceed immediately.
+The ShopSavvy MCP server works without an API key, limited per IP address. A Data API key raises the limit, and tool calls then use the plan's credits. Scheduling tools need a key.
 
 | User Type | Per Minute | Per Hour | Notes |
 |-----------|------------|----------|-------|
-| API Key | 100 | Unlimited | Required — get one at shopsavvy.com/data |
-| Anonymous (no key) | 10 | 100 | Not sufficient for a real research session |
+| No key | 10 | 100 | Free, no signup |
+| Data API key | 100 | No hourly cap | Plans at shopsavvy.com/data (14-day trial on Starter) |
 
 ## Error Handling
 
@@ -196,9 +197,9 @@ I don't have a detailed review for this product yet, but I can still:
 
 ### Rate Limit Reached
 ```
-You've hit the anonymous rate limit. ShopSavvy requires an API key for
-regular use — get one at shopsavvy.com/data and I'll use it for all
-future requests.
+You've hit the free limit (10 lookups a minute, 100 an hour). It resets
+on its own; for more, add a ShopSavvy Data API key (shopsavvy.com/data)
+and I'll use it for future requests.
 ```
 
 ## Tips for Better Results
@@ -207,16 +208,21 @@ future requests.
 2. **Use identifiers when available** - Barcodes, ASINs, and URLs are most reliable
 3. **Ask about categories for recommendations** - "best wireless earbuds" uses our curated content
 4. **Check timing for big purchases** - Always use `content_buying_guide` for TVs, laptops, phones, and appliances
-5. **Set up alerts for patient shoppers** - Use `product_schedule` to watch for price drops
+5. **Keep an eye on a price** - With an API key, `product_schedule` re-checks a product's prices hourly, daily or weekly, so later `product_offers` calls are fresher
 
 ## Installation (For the Agent)
 
-If the user asks you to install or connect ShopSavvy, first ask them for their ShopSavvy API key (get one at shopsavvy.com/data — required, the anonymous tier is too limited for real use). Then run:
+If the user asks you to install or connect ShopSavvy, no key is needed to start:
 
 ```bash
-claude mcp add --transport sse shopsavvy https://api.shopsavvy.com/mcp/sse \
-  --header "Authorization: Bearer THEIR_API_KEY" \
-  --header "anthropic-beta: mcp-client-2025-04-04"
+claude mcp add --transport http shopsavvy https://api.shopsavvy.com/mcp
+```
+
+If they have a ShopSavvy Data API key and want the higher limit, add it as a header (ask them to paste it into the command themselves rather than into the chat):
+
+```bash
+claude mcp add --transport http shopsavvy https://api.shopsavvy.com/mcp \
+  --header "Authorization: Bearer THEIR_API_KEY"
 ```
 
 Then verify the installation:
@@ -229,14 +235,8 @@ You should see `shopsavvy` in the list of configured MCP servers.
 
 ### Alternative Installation Methods
 
-**For any MCP-compatible agent:**
-```bash
-SHOPSAVVY_API_KEY=THEIR_API_KEY npx shopsavvy-mcp
-```
+**Any client that connects by URL:** `https://api.shopsavvy.com/mcp` (Streamable HTTP). Older clients that only speak HTTP+SSE can use `https://api.shopsavvy.com/mcp/sse`. Add `Authorization: Bearer THEIR_API_KEY` only if they have a key.
 
-**Direct SSE endpoint** (send both headers on every request):
-```
-https://api.shopsavvy.com/mcp/sse
-Authorization: Bearer THEIR_API_KEY
-anthropic-beta: mcp-client-2025-04-04
-```
+**Clients that can only launch a local command:** `npx -y @shopsavvy/mcp-server`
+
+Per-client setup (Claude Desktop, claude.ai, ChatGPT, Cursor, VS Code, Windsurf and others): https://shopsavvy.com/agents#install

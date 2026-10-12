@@ -1,7 +1,7 @@
 {
   "name": "shopsavvy-mcp",
   "version": "1.0.0",
-  "description": "ShopSavvy MCP server for AI agents - 100M+ products across 40,000+ retailers",
+  "description": "ShopSavvy MCP server for AI agents: tens of millions of products, prices from tens of thousands of retailers",
   "type": "module",
   "bin": {
     "shopsavvy-mcp": "dist/index.js"

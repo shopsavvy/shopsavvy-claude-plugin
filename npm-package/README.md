@@ -1,6 +1,6 @@
 # shopsavvy-mcp
 
-Pre-configured MCP server for ShopSavvy - connect your AI agent to 100M+ products across 40,000+ retailers.
+Pre-configured MCP server for ShopSavvy - connect your AI agent to tens of millions of products with prices from tens of thousands of retailers.
 
 **Requires an API key.** Get one at [shopsavvy.com/data](https://shopsavvy.com/data).
 
@@ -70,7 +70,7 @@ Once connected, ask your AI:
 | Tool | Description |
 |------|-------------|
 | `product_lookup` | Find product by barcode, ASIN, URL, or name |
-| `product_search` | Search 100M+ products |
+| `product_search` | Keyword search across tens of millions of products |
 | `product_offers` | Get prices from all retailers |
 | `product_price_history` | View historical pricing |
 | `product_schedule` | Set up price monitoring |

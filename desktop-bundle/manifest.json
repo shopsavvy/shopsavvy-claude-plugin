@@ -2,7 +2,7 @@
   "name": "shopsavvy",
   "display_name": "ShopSavvy",
   "version": "1.0.0",
-  "description": "Shop smarter with AI - 100M+ products across 40,000+ retailers. Find the best prices, compare deals, and get expert buying advice.",
+  "description": "Shop smarter with AI: tens of millions of products with prices from tens of thousands of retailers. Find the best prices, compare deals, and get expert buying advice.",
   "homepage": "https://shopsavvy.com/agents",
   "icon": "icon.png",
   "runtime": {
