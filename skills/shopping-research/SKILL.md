@@ -1,6 +1,6 @@
 ---
 name: shopping-research
-description: Research products, compare prices, find the best deals, and get expert buying advice from ShopSavvy, which covers 30M+ products, prices from tens of thousands of retailers and price history back to 2011
+description: Research products, compare prices, find the best deals, and get expert buying advice from ShopSavvy, which covers 30M+ products, prices from tens of thousands of retailers and price history back to 2011 (dense from 2019)
 user-invocable: true
 argument-hint: [product, category, or question]
 ---
