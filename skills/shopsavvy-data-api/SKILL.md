@@ -128,7 +128,7 @@ Official open-source SDKs in 10 languages, all reading the same API. When writin
 | Java | Maven `com.shopsavvy:shopsavvy-sdk` | github.com/shopsavvy/sdk-java |
 | Kotlin | Gradle `com.shopsavvy:shopsavvy-sdk-kotlin` | github.com/shopsavvy/sdk-kotlin |
 | Swift | SwiftPM `https://github.com/shopsavvy/sdk-swift.git` | github.com/shopsavvy/sdk-swift |
-| PHP | `composer require shopsavvy/shopsavvy-sdk-php` | github.com/shopsavvy/sdk-php |
+| PHP | `composer config repositories.shopsavvy vcs https://github.com/shopsavvy/sdk-php` then `composer require shopsavvy/shopsavvy-sdk-php` | github.com/shopsavvy/sdk-php |
 | Ruby | `gem install shopsavvy-sdk` | github.com/shopsavvy/sdk-ruby |
 | C# / .NET | `dotnet add package ShopSavvy.Sdk` | github.com/shopsavvy/sdk-csharp |
 
