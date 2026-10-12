@@ -1,24 +1,36 @@
 # ShopSavvy AI Agent Plugin
 
-A Claude Code plugin for shopping research and price comparison, powered by ShopSavvy's database of 100M+ products across 40,000+ retailers.
+A Claude Code plugin for shopping research and price comparison, powered by ShopSavvy: tens of millions of products, current prices from tens of thousands of retailers, and price history back to 2011.
 
 ## Features
 
 ### Product Research
 - **Product Lookup** - Find products by barcode, ASIN, URL, or name
-- **Product Search** - Full-text search across 100M+ products
+- **Product Search** - Keyword search across tens of millions of products
 - **Universal Search** - Enhanced search with rankings and reviews
 
 ### Price Intelligence
 - **Price Comparison** - Current prices from ALL retailers
 - **Price History** - Historical trends to find the best time to buy
-- **Price Monitoring** - Set up alerts for price drops
+- **Scheduled Re-checks** - Keep a product's prices refreshed hourly, daily or weekly (needs an API key)
 
 ### Expert Content
 - **Best Picks** - Curated "Best Of" buying guides
 - **TLDR Reviews** - Quick pros/cons/verdict summaries
 - **Q&A Answers** - Product-specific questions answered
 - **Buying Guides** - When-to-buy timing advice
+
+## Skills
+
+| Skill | For | What it does |
+|-------|-----|--------------|
+| `shopping-research` | Shoppers | Best price, buy now or wait, category picks, quick reviews |
+| `shopsavvy-data-api` | Developers | Which Data API call answers which question, the order to try (MCP tools, then REST with `SHOPSAVVY_API_KEY`), credit costs, limits, error codes and fixes, identifier tips, SDK install lines |
+| `competitor-price-report` | Pricing and ops teams | A list of SKUs in; a dated CSV of every retailer's current price and a REPORT.md with price position and gaps out |
+| `price-history-export` | Analysts | Price history for many products over any date range as CSV, split into 366-day slices to keep credits down |
+| `retailer-coverage-check` | Anyone evaluating coverage | Which retailers have current offers for your products, how recently each was seen, and where the gaps are |
+
+Every skill estimates credits before a large job, checks the balance with the free `/v1/usage` call, and reports "not found" and "no offers" as exactly that: no skill fills a gap with a guessed price.
 
 ## Installation
 

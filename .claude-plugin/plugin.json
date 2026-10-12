@@ -1,6 +1,6 @@
 {
   "name": "shopsavvy",
-  "description": "Shopping research and price comparison powered by ShopSavvy's database of 100M+ products across 40,000+ retailers",
+  "description": "Shopping research and price comparison from ShopSavvy (tens of millions of products, prices from tens of thousands of retailers), plus Data API skills for developers: competitor price reports, price-history exports and retailer coverage checks",
   "version": "1.0.0",
   "author": {
     "name": "Monolith Technologies, Inc.",
