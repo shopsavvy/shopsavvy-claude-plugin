@@ -4,8 +4,9 @@
  * Every skills/<name>/SKILL.md must:
  * - start with frontmatter whose `name` matches its directory and has a `description`
  * - stay under 500 lines (Claude loads the whole file into context)
- * - make no retired coverage claims (they were wrong: the catalog is tens of millions of
- *   products and coverage is "tens of thousands of retailers", never a specific count)
+ * - make no retired coverage claims (they were wrong: the catalog is "30M+ products", the
+ *   one catalog figure every ShopSavvy surface uses since 2026-10-12, and coverage is
+ *   "tens of thousands of retailers", never a specific count)
  * - only name MCP tools the ShopSavvy server actually serves
  * The data skills must also carry the "never fabricate" rule and the key-handling rule.
  */
@@ -85,6 +86,14 @@ describe('skill pack', () => {
       expect(text).toMatch(/never print/i)
     })
   }
+
+  test('plugin manifest, README and shopping skill state the catalog as "30M+ products"', async () => {
+    for (const file of ['../.claude-plugin/plugin.json', '../README.md', '../skills/shopping-research/SKILL.md']) {
+      const text = await Bun.file(join(import.meta.dir, file)).text()
+      expect({ file, catalog: text.includes('30M+ products') }).toEqual({ file, catalog: true })
+      expect({ file, vague: /tens of millions of products/i.test(text) }).toEqual({ file, vague: false })
+    }
+  })
 
   test('plugin manifest and READMEs make no retired coverage claims', async () => {
     const files = ['../.claude-plugin/plugin.json', '../.claude-plugin/marketplace.json', '../README.md']

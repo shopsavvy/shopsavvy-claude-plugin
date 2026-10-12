@@ -1,7 +1,7 @@
 {
   "name": "shopsavvy",
   "displayName": "ShopSavvy",
-  "description": "Shopping research and price comparison from ShopSavvy (tens of millions of products, prices from tens of thousands of retailers, price history back to 2011), plus Data API skills for developers: competitor price reports, price-history exports and retailer coverage checks. Works without an API key; a ShopSavvy Data API key is optional and raises the rate limit.",
+  "description": "Shopping research and price comparison from ShopSavvy (30M+ products, prices from tens of thousands of retailers, price history back to 2011), plus Data API skills for developers: competitor price reports, price-history exports and retailer coverage checks. Works without an API key; a ShopSavvy Data API key is optional and raises the rate limit.",
   "version": "1.1.0",
   "author": {
     "name": "Monolith Technologies, Inc.",

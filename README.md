@@ -1,6 +1,6 @@
 # ShopSavvy plugin for Claude
 
-Shopping research and price comparison inside Claude, from [ShopSavvy](https://shopsavvy.com/agents?utm_source=github&utm_medium=referral&utm_campaign=claude_plugin): look up products by barcode, ASIN, URL or name across tens of millions of products, compare current prices from tens of thousands of retailers, check price history back to 2011, and read ShopSavvy's buying guides and quick reviews. Developers also get skills for the ShopSavvy Data API: competitor price reports, price-history exports and retailer coverage checks.
+Shopping research and price comparison inside Claude, from [ShopSavvy](https://shopsavvy.com/agents?utm_source=github&utm_medium=referral&utm_campaign=claude_plugin): look up products by barcode, ASIN, URL or name across 30M+ products, compare current prices from tens of thousands of retailers, check price history back to 2011, and read ShopSavvy's buying guides and quick reviews. Developers also get skills for the ShopSavvy Data API: competitor price reports, price-history exports and retailer coverage checks.
 
 **No API key needed.** The plugin connects to ShopSavvy's hosted MCP server and works as soon as it's installed (10 tool calls a minute, 100 an hour). A ShopSavvy Data API key is optional and raises the limit.
 
